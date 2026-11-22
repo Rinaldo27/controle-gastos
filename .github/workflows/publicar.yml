@@ -57,7 +57,7 @@ jobs:
       - name: Carimbar a versão do service worker com o commit
         run: sed -i "s/^const VERSAO = .*/const VERSAO = '${GITHUB_SHA::7}';/" src/sw.js
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: src
       - id: deploy
