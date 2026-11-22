@@ -23,6 +23,14 @@ test.describe('PWA', () => {
     }
   });
 
+  test('a primeira visita não oferece uma "nova versão"', async ({ page }) => {
+    await abrirApp(page);
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    // Espera os eventos tardios do navegador: o aviso falso aparecia depois da instalação.
+    await page.waitForTimeout(500);
+    await expect(page.getByTestId('aviso').filter({ hasText: 'nova versão' })).toHaveCount(0);
+  });
+
   test('funciona sem internet depois da primeira visita', async ({
     page,
     context,
