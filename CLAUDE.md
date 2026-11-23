@@ -13,8 +13,8 @@ build). Usado em iPhone e Android. Projeto de aprendizado: explique as decisões
 ## Arquitetura (dependências só no sentido `ui` -> `data`/`domain`)
 
 - `src/js/domain/`: funções puras. **Proibido** usar `document`, `window` ou `localStorage` aqui.
-- `src/js/data/`: repositório assíncrono (contrato em `repositorio.js`) e backup. Só `repositorioLocalStorage.js`
-  conhece o `localStorage`.
+- `src/js/data/`: repositório assíncrono (contrato em `repositorio.js`), backup e preferências da interface.
+  Só `repositorioLocalStorage.js` e `preferencias.js` conhecem o `localStorage`.
 - `src/js/ui/`: telas e componentes. Monte o DOM com `h()` de `ui/dom.js`. **Nunca** use `innerHTML`.
 - `src/js/pwa/`: instalação e registro do service worker.
 - `src/sw.js`: service worker.

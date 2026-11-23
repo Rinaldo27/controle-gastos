@@ -5,15 +5,31 @@ relatórios. Funciona como **PWA instalável** (Android e iPhone), é **Mobile F
 
 Feito com HTML5, CSS3 e JavaScript puro (sem frameworks). Os dados ficam no `localStorage` do aparelho.
 
-## Funcionalidades
+## Para quem vai usar
 
-- Receitas e despesas com descrição, valor, data, categoria e natureza (fixa ou variável)
-- Editar e excluir lançamentos (com confirmação)
-- Resumo do mês: receitas, despesas, saldo e gráficos por categoria e por natureza
-- Relatórios: evolução dos últimos 3, 6 ou 12 meses, histórico em tabela e filtro por categoria
-- Backup: exportar e importar os dados em JSON (útil para trocar de aparelho)
-- Instalação na tela inicial e uso sem internet
-- Tema claro e escuro automático, navegação por teclado e leitores de tela
+O Expense Tracker mostra **quanto entrou, quanto saiu e quanto sobrou no mês**.
+
+**Acesse:** https://rinaldo27.github.io/controle-gastos/
+
+**O que ele faz**
+
+- Registra receitas e despesas (valor, data e categoria), fixas ou variáveis.
+- Mostra o saldo do mês e as despesas por categoria.
+- Compara os últimos meses em gráfico e tabela.
+- Funciona sem internet e se instala no celular (veja [Instalar no celular](#instalar-no-celular)).
+
+**Como usar**
+
+1. Toque em **+ Novo** e registre cada receita ou despesa.
+2. Veja o saldo em **Resumo** e a evolução em **Relatórios**.
+3. Troque de mês com as setas **‹ ›**.
+
+**Importante:** os dados ficam **só no seu celular**, sem conta e sem servidor. Se você trocar de aparelho
+ou apagar os dados do navegador, perde tudo. Faça backup em **Ajustes > Exportar backup**.
+
+## Para quem vai desenvolver
+
+O restante deste documento é técnico: como rodar, testar, publicar e a arquitetura do projeto.
 
 ## Requisitos
 

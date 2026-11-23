@@ -24,7 +24,10 @@
 
   <body>
     <header class="cabecalho">
-      <p class="cabecalho__marca">Expense Tracker</p>
+      <p class="cabecalho__marca">
+        <img class="cabecalho__icone" src="icons/icon-192.png" alt="" width="32" height="32" />
+        <span class="cabecalho__nome">Expense Tracker</span>
+      </p>
       <div class="seletor-mes" id="seletor-mes" role="group" aria-label="Mês de referência">
         <button
           type="button"
@@ -82,6 +85,34 @@
       </a>
     </nav>
 
+    <aside
+      id="banner-instalar"
+      class="banner"
+      aria-label="Instalar o aplicativo"
+      data-testid="banner-instalar"
+      hidden
+    >
+      <p id="banner-instalar-texto" class="banner__texto"></p>
+      <div class="banner__acoes">
+        <button
+          type="button"
+          id="banner-instalar-sim"
+          class="botao botao--primario"
+          data-testid="banner-instalar-sim"
+        >
+          Instalar
+        </button>
+        <button
+          type="button"
+          id="banner-instalar-nao"
+          class="botao botao--secundario"
+          data-testid="banner-instalar-nao"
+        >
+          Agora não
+        </button>
+      </div>
+    </aside>
+
     <main id="principal" class="principal"></main>
 
     <button type="button" id="botao-novo" class="fab" data-testid="botao-novo" hidden>
@@ -104,8 +135,8 @@
           </div>
         </fieldset>
 
-        <fieldset class="segmentado">
-          <legend>Natureza</legend>
+        <fieldset class="segmentado" aria-describedby="dica-natureza">
+          <legend>É fixa ou variável?</legend>
           <div class="segmentado__opcoes">
             <label
               ><input type="radio" name="natureza" value="variavel" checked /><span
@@ -114,6 +145,9 @@
             >
             <label><input type="radio" name="natureza" value="fixa" /><span>Fixa</span></label>
           </div>
+          <p class="campo__dica" id="dica-natureza">
+            Fixa se repete todo mês (aluguel, salário). Variável muda de mês a mês (mercado, lazer).
+          </p>
         </fieldset>
 
         <div class="campo">
@@ -124,6 +158,7 @@
             type="text"
             maxlength="80"
             autocomplete="off"
+            placeholder="Ex.: Mercado"
             aria-describedby="erro-descricao"
             data-testid="campo-descricao"
           />

@@ -18,7 +18,9 @@ test.describe('PWA', () => {
     await abrirApp(page, 'ajustes');
     await expect(page.getByRole('heading', { name: /Instalar/ })).toBeVisible();
     if (browserName === 'webkit') {
-      await expect(page.getByText('Adicionar à Tela de Início')).toBeVisible();
+      await expect(
+        page.locator('#principal').getByText('Adicionar à Tela de Início'),
+      ).toBeVisible();
       await expect(page.getByText('separados do Safari')).toBeVisible();
     }
   });

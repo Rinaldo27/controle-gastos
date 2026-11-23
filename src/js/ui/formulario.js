@@ -2,7 +2,7 @@ import { CATEGORIAS } from '../domain/categorias.js';
 import { criarLancamento, atualizarLancamento } from '../domain/lancamento.js';
 import { validarLancamento } from '../domain/validacao.js';
 import { centavosParaInput, parseValorParaCentavos } from '../domain/formato.js';
-import { hojeISO, mesDe } from '../domain/datas.js';
+import { formatarMes, hojeISO, mesDe } from '../domain/datas.js';
 import { avisar } from './avisos.js';
 
 const CAMPOS_COM_ERRO = ['descricao', 'valor', 'data', 'categoria'];
@@ -80,9 +80,15 @@ export function iniciarFormulario(ctx) {
         ? atualizarLancamento(existente, entrada)
         : criarLancamento(entrada);
       await ctx.repo.salvar(lancamento);
+      const mesAnterior = ctx.estado.mes;
       ctx.estado.mes = mesDe(lancamento.data);
       dialogo.close();
-      avisar('Lançamento salvo.', { tipo: 'sucesso' });
+      avisar(
+        ctx.estado.mes === mesAnterior
+          ? 'Lançamento salvo.'
+          : `Lançamento salvo em ${formatarMes(ctx.estado.mes)}.`,
+        { tipo: 'sucesso' },
+      );
       await ctx.recarregar();
     } catch (erro) {
       avisar(erro.message, { tipo: 'erro' });

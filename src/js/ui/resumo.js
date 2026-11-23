@@ -12,8 +12,42 @@ function cartao(rotulo, centavos, variante, testid, largo = false) {
   );
 }
 
+function boasVindas(ctx) {
+  return h(
+    'section',
+    { class: 'boas-vindas', 'data-testid': 'boas-vindas' },
+    h('h2', {}, 'Bem-vindo!'),
+    h(
+      'p',
+      {},
+      'Registre suas receitas e despesas para ver quanto entrou, quanto saiu e quanto sobrou no mês.',
+    ),
+    h(
+      'button',
+      {
+        type: 'button',
+        class: 'botao botao--primario',
+        'data-testid': 'primeiro-lancamento',
+        onclick: () => ctx.abrirFormulario(),
+      },
+      'Registrar o primeiro lançamento',
+    ),
+    h(
+      'p',
+      { class: 'nota' },
+      'Seus dados ficam só neste aparelho, sem conta e sem servidor. Faça um backup de vez em quando em Ajustes.',
+    ),
+  );
+}
+
 export async function renderResumo(container, ctx) {
-  const doMesLista = doMes(await ctx.repo.listar(), ctx.estado.mes);
+  const todos = await ctx.repo.listar();
+  if (todos.length === 0) {
+    container.append(h('h1', { tabindex: '-1' }, 'Resumo'), boasVindas(ctx));
+    return;
+  }
+
+  const doMesLista = doMes(todos, ctx.estado.mes);
   const { receitas, despesas, saldo } = calcularTotais(doMesLista);
   const porCategoria = totaisPorCategoria(doMesLista, 'despesa');
   const porNatureza = totaisPorNatureza(doMesLista, 'despesa');
