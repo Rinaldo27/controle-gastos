@@ -24,6 +24,12 @@ export function secao(titulo, ...conteudo) {
   return h('section', { class: 'secao' }, h('h2', {}, titulo), ...conteudo);
 }
 
+export function secaoCartao(titulo, ...conteudo) {
+  const elemento = secao(titulo, ...conteudo);
+  elemento.classList.add('secao--cartao');
+  return elemento;
+}
+
 export function vazio(mensagem, testid) {
   return h('p', { class: 'vazio', 'data-testid': testid }, mensagem);
 }

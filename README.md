@@ -21,7 +21,7 @@ O Expense Tracker mostra **quanto entrou, quanto saiu e quanto sobrou no mês**.
 
 **Como usar**
 
-1. Toque em **+ Novo** e registre cada receita ou despesa.
+1. Toque no botão **+** e registre cada receita ou despesa.
 2. Veja o saldo em **Resumo** e a evolução em **Relatórios**.
 3. Troque de mês com as setas **‹ ›**.
 

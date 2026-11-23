@@ -113,10 +113,11 @@ export function gerarRelatorioMensal({ lancamentos, mes, geradoEm }) {
     })),
   );
   const natureza = totaisPorNatureza(lancamentos, 'despesa');
-  barras('Despesas fixas e variáveis', [
+  const naturezas = [
     { rotulo: 'Fixas', valor: natureza.fixa },
     { rotulo: 'Variáveis', valor: natureza.variavel },
-  ]);
+  ].filter((item) => item.valor > 0);
+  if (naturezas.length === 2) barras('Despesas fixas e variáveis', naturezas);
 
   const colunas = { data: MARGEM, descricao: 100, categoria: 330, natureza: 430 };
   function cabecalhoTabela() {

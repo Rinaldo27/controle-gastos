@@ -1,4 +1,4 @@
-import { h, secao, vazio } from './dom.js';
+import { h, secaoCartao, vazio } from './dom.js';
 import { avisar } from './avisos.js';
 import { entregarArquivo } from './arquivos.js';
 import { graficoBarras } from './graficos.js';
@@ -78,6 +78,11 @@ export async function renderResumo(container, ctx) {
   const { receitas, despesas, saldo } = calcularTotais(doMesLista);
   const porCategoria = totaisPorCategoria(doMesLista, 'despesa');
   const porNatureza = totaisPorNatureza(doMesLista, 'despesa');
+  // Com só um tipo de despesa, "Fixas 0%" e "Variáveis 100%" não acrescentam nada: a seção some.
+  const naturezas = [
+    { rotulo: 'Fixas', valorCentavos: porNatureza.fixa },
+    { rotulo: 'Variáveis', valorCentavos: porNatureza.variavel },
+  ].filter((item) => item.valorCentavos > 0);
 
   container.append(
     h('h1', { tabindex: '-1' }, 'Resumo'),
@@ -95,7 +100,7 @@ export async function renderResumo(container, ctx) {
         descreverResultado({ receitas, despesas, saldo }),
       ),
     ),
-    secao(
+    secaoCartao(
       'Despesas por categoria',
       porCategoria.length
         ? graficoBarras(
@@ -106,20 +111,14 @@ export async function renderResumo(container, ctx) {
           )
         : vazio('Nenhuma despesa neste mês.', 'sem-despesas'),
     ),
-    secao(
-      'Despesas fixas e variáveis',
-      despesas > 0
-        ? graficoBarras([
-            { rotulo: 'Fixas', valorCentavos: porNatureza.fixa },
-            { rotulo: 'Variáveis', valorCentavos: porNatureza.variavel },
-          ])
-        : vazio('Nenhuma despesa neste mês.'),
-    ),
+    ...(naturezas.length === 2
+      ? [secaoCartao('Despesas fixas e variáveis', graficoBarras(naturezas))]
+      : []),
   );
 
   if (doMesLista.length > 0) {
     container.append(
-      secao(
+      secaoCartao(
         'Relatório do mês',
         h(
           'p',

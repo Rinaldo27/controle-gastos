@@ -116,7 +116,7 @@ export async function renderLancamentos(container, ctx) {
     container.append(
       vazio(
         doMesLista.length === 0
-          ? 'Nenhum lançamento neste mês. Toque em “+ Novo” para começar.'
+          ? 'Nenhum lançamento neste mês. Toque no botão + para começar.'
           : 'Nenhum lançamento nesta categoria.',
         'lista-vazia',
       ),
