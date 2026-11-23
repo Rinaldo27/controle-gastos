@@ -47,6 +47,15 @@ export function totaisPorNatureza(lancamentos, tipo = 'despesa') {
   return totais;
 }
 
+// Frase curta que explica o Resultado do mês em linguagem comum (valores em centavos).
+export function descreverResultado({ receitas, despesas, saldo }) {
+  if (saldo > 0) return 'Sobrou este mês';
+  if (saldo < 0) return 'Gastou mais do que recebeu';
+  return receitas === 0 && despesas === 0
+    ? 'Sem lançamentos neste mês'
+    : 'Entrou e saiu o mesmo valor';
+}
+
 export function evolucaoMensal(lancamentos, mesFinal, quantidade) {
   const serie = [];
   for (let i = quantidade - 1; i >= 0; i -= 1) {

@@ -1,15 +1,42 @@
 import { h, secao, vazio } from './dom.js';
+import { avisar } from './avisos.js';
+import { entregarArquivo } from './arquivos.js';
 import { graficoBarras } from './graficos.js';
+import { formatarMes, hojeISO } from '../domain/datas.js';
 import { formatarMoeda } from '../domain/formato.js';
-import { calcularTotais, doMes, totaisPorCategoria, totaisPorNatureza } from '../domain/regras.js';
+import { gerarRelatorioMensal } from '../domain/relatorioPdf.js';
+import {
+  calcularTotais,
+  descreverResultado,
+  doMes,
+  totaisPorCategoria,
+  totaisPorNatureza,
+} from '../domain/regras.js';
 
-function cartao(rotulo, centavos, variante, testid, largo = false) {
+function cartao(rotulo, centavos, variante, testid, largo = false, legenda = '') {
   return h(
     'div',
     { class: `cartao cartao--${variante}${largo ? ' cartao--largo' : ''}` },
     h('span', { class: 'cartao__rotulo' }, rotulo),
     h('strong', { class: 'cartao__valor', 'data-testid': testid }, formatarMoeda(centavos)),
+    legenda
+      ? h('span', { class: 'cartao__legenda', 'data-testid': `${testid}-legenda` }, legenda)
+      : null,
   );
+}
+
+async function salvarRelatorio(ctx, lancamentos) {
+  try {
+    const bytes = gerarRelatorioMensal({ lancamentos, mes: ctx.estado.mes, geradoEm: hojeISO() });
+    const arquivo = new File([bytes], `relatorio-${ctx.estado.mes}.pdf`, {
+      type: 'application/pdf',
+    });
+    if (await entregarArquivo(arquivo, `Relatório de ${formatarMes(ctx.estado.mes)}`)) {
+      avisar('Relatório salvo.', { tipo: 'sucesso' });
+    }
+  } catch (erro) {
+    avisar(erro.message, { tipo: 'erro' });
+  }
 }
 
 function boasVindas(ctx) {
@@ -59,7 +86,14 @@ export async function renderResumo(container, ctx) {
       { class: 'cartoes' },
       cartao('Receitas', receitas, 'receita', 'total-receitas'),
       cartao('Despesas', despesas, 'despesa', 'total-despesas'),
-      cartao('Saldo do mês', saldo, saldo < 0 ? 'despesa' : 'receita', 'saldo', true),
+      cartao(
+        'Resultado do mês',
+        saldo,
+        saldo < 0 ? 'despesa' : 'receita',
+        'saldo',
+        true,
+        descreverResultado({ receitas, despesas, saldo }),
+      ),
     ),
     secao(
       'Despesas por categoria',
@@ -82,4 +116,27 @@ export async function renderResumo(container, ctx) {
         : vazio('Nenhuma despesa neste mês.'),
     ),
   );
+
+  if (doMesLista.length > 0) {
+    container.append(
+      secao(
+        'Relatório do mês',
+        h(
+          'p',
+          {},
+          `Gera um PDF com o resumo e todos os lançamentos de ${formatarMes(ctx.estado.mes)}.`,
+        ),
+        h(
+          'button',
+          {
+            type: 'button',
+            class: 'botao botao--secundario',
+            'data-testid': 'botao-relatorio-pdf',
+            onclick: () => salvarRelatorio(ctx, doMesLista),
+          },
+          'Salvar relatório em PDF',
+        ),
+      ),
+    );
+  }
 }

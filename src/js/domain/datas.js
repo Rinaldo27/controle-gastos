@@ -58,6 +58,11 @@ export function formatarMesCurto(mes) {
   return `${MESES_CURTOS[numero - 1]}/${String(ano).slice(2)}`;
 }
 
+export function formatarData(dataISO) {
+  const [ano, mes, dia] = dataISO.split('-');
+  return `${dia}/${mes}/${ano}`;
+}
+
 export function formatarDataCurta(dataISO) {
   const [, mes, dia] = dataISO.split('-');
   return `${dia}/${mes}`;

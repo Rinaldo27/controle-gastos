@@ -1,17 +1,9 @@
 import { h, secao } from './dom.js';
 import { avisar } from './avisos.js';
+import { entregarArquivo } from './arquivos.js';
 import { exportarDados, importarDados } from '../data/backup.js';
 import { hojeISO } from '../domain/datas.js';
 import { ehIOS, estaInstalado, instalar, podeInstalarNativamente } from '../pwa/instalacao.js';
-
-function baixar(arquivo) {
-  const url = URL.createObjectURL(arquivo);
-  const link = h('a', { href: url, download: arquivo.name });
-  document.body.append(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 
 async function exportar(ctx) {
   try {
@@ -19,18 +11,9 @@ async function exportar(ctx) {
     const arquivo = new File([texto], `expense-tracker-${hojeISO()}.json`, {
       type: 'application/json',
     });
-
-    // No celular, o menu de compartilhar permite salvar no Arquivos/Drive ou enviar por mensagem.
-    if (navigator.canShare?.({ files: [arquivo] })) {
-      try {
-        await navigator.share({ files: [arquivo], title: 'Backup do Expense Tracker' });
-        return;
-      } catch (erro) {
-        if (erro.name === 'AbortError') return;
-      }
+    if (await entregarArquivo(arquivo, 'Backup do Expense Tracker')) {
+      avisar('Backup exportado.', { tipo: 'sucesso' });
     }
-    baixar(arquivo);
-    avisar('Backup exportado.', { tipo: 'sucesso' });
   } catch (erro) {
     avisar(erro.message, { tipo: 'erro' });
   }

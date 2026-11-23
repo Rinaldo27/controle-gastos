@@ -16,6 +16,7 @@ O Expense Tracker mostra **quanto entrou, quanto saiu e quanto sobrou no mês**.
 - Registra receitas e despesas (valor, data e categoria), fixas ou variáveis.
 - Mostra o saldo do mês e as despesas por categoria.
 - Compara os últimos meses em gráfico e tabela.
+- Gera o relatório do mês em PDF (resumo, despesas por categoria e lançamentos), para guardar ou compartilhar.
 - Funciona sem internet e se instala no celular (veja [Instalar no celular](#instalar-no-celular)).
 
 **Como usar**

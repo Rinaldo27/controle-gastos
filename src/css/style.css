@@ -526,6 +526,11 @@ input {
   font-size: 1.75rem;
 }
 
+.cartao__legenda {
+  color: var(--cor-texto-suave);
+  font-size: 0.9375rem;
+}
+
 .cartao--receita .cartao__valor {
   color: var(--cor-receita);
 }
