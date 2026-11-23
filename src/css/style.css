@@ -1,0 +1,761 @@
+/* ===== Tokens ===== */
+:root {
+  color-scheme: light dark;
+  --cor-fundo: #f4f6f5;
+  --cor-superficie: #ffffff;
+  --cor-texto: #1b1f1d;
+  --cor-texto-suave: #4d5752;
+  --cor-borda: #d3dad6;
+  --cor-primaria: #0b6b4f;
+  --cor-primaria-texto: #ffffff;
+  --cor-receita: #0b6b4f;
+  --cor-despesa: #b3261e;
+  --cor-foco: #0b57d0;
+  --raio: 14px;
+  --alvo-toque: 48px;
+  --altura-nav: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #101412;
+    --cor-superficie: #1a1f1c;
+    --cor-texto: #e8ece9;
+    --cor-texto-suave: #a9b4ae;
+    --cor-borda: #34403a;
+    --cor-primaria: #5fd3a6;
+    --cor-primaria-texto: #04261b;
+    --cor-receita: #5fd3a6;
+    --cor-despesa: #ff8a80;
+    --cor-foco: #8ab4ff;
+  }
+}
+
+/* ===== Base (pensada primeiro para celular) ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+h1,
+h2 {
+  line-height: 1.25;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+h1:focus {
+  outline: none;
+}
+
+h2 {
+  font-size: 1.125rem;
+}
+
+p {
+  margin: 0 0 12px;
+}
+
+button,
+a,
+select,
+input {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Estrutura da página ===== */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: calc(8px + env(safe-area-inset-top)) 16px 8px;
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.cabecalho__marca {
+  margin: 0;
+  font-weight: 700;
+  color: var(--cor-primaria);
+}
+
+.seletor-mes {
+  display: flex;
+  align-items: center;
+}
+
+.seletor-mes__rotulo {
+  display: inline-block;
+  min-width: 9.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.seletor-mes__rotulo::first-letter {
+  text-transform: uppercase;
+}
+
+.navegacao {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--cor-superficie);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.navegacao a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--altura-nav);
+  padding: 6px 4px;
+  font-size: 0.75rem;
+  color: var(--cor-texto-suave);
+  text-decoration: none;
+}
+
+.navegacao svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.navegacao a[aria-current='page'] {
+  color: var(--cor-primaria);
+  font-weight: 700;
+  box-shadow: inset 0 3px 0 var(--cor-primaria);
+}
+
+.principal {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px calc(var(--altura-nav) + env(safe-area-inset-bottom) + 96px);
+}
+
+.fab {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: calc(var(--altura-nav) + env(safe-area-inset-bottom) + 16px);
+  z-index: 9;
+  min-height: 56px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 28px;
+  background: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
+  font: inherit;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.3);
+  cursor: pointer;
+}
+
+/* ===== Componentes ===== */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--alvo-toque);
+  padding: 0 20px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao--primario {
+  background: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
+}
+
+.botao--secundario {
+  background: transparent;
+  border-color: var(--cor-borda);
+  color: var(--cor-texto);
+}
+
+.botao--perigo {
+  background: var(--cor-despesa);
+  color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .botao--perigo {
+    color: #2b0b09;
+  }
+}
+
+.botao--texto {
+  background: transparent;
+  color: var(--cor-primaria);
+  padding: 0 12px;
+}
+
+.botao--perigo-texto {
+  color: var(--cor-despesa);
+}
+
+.botao-icone {
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.campo {
+  margin-bottom: 16px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  min-height: var(--alvo-toque);
+  padding: 0 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 1rem; /* 16px ou mais evita o zoom automático do iOS ao focar */
+}
+
+.campo input[type='file'] {
+  padding: 8px 12px;
+  height: auto;
+}
+
+/* O Safari do iPhone ignora a altura do seletor nativo (ficava com ~23px); por isso a seta é desenhada aqui. */
+.campo select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--cor-texto-suave) 50%),
+    linear-gradient(135deg, var(--cor-texto-suave) 50%, transparent 50%);
+  background-position:
+    calc(100% - 22px) 50%,
+    calc(100% - 16px) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+.campo [aria-invalid='true'] {
+  border: 2px solid var(--cor-despesa);
+}
+
+.campo__erro {
+  margin: 6px 0 0;
+  color: var(--cor-despesa);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.segmentado {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.segmentado legend {
+  padding: 0;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.segmentado__opcoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.segmentado label {
+  position: relative;
+}
+
+.segmentado input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segmentado span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--alvo-toque);
+  border: 2px solid var(--cor-borda);
+  border-radius: 12px;
+  background: var(--cor-superficie);
+  font-weight: 600;
+}
+
+.segmentado input:checked + span {
+  border-color: var(--cor-primaria);
+  background: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
+}
+
+.segmentado input:focus-visible + span {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.dialogo {
+  width: min(92vw, 480px);
+  max-height: 90vh;
+  max-height: 90dvh;
+  padding: 20px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  overflow-y: auto;
+}
+
+.dialogo::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+
+.dialogo h2 {
+  margin-bottom: 16px;
+}
+
+.dialogo__acoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Ficam acima do botão "+ Novo" e não capturam toques, para nunca cobrir os controles do app. */
+.avisos {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(var(--altura-nav) + env(safe-area-inset-bottom) + 88px);
+  z-index: 100;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 480px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #24302a;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.3);
+}
+
+.aviso--erro {
+  background: #8c1d18;
+}
+
+.aviso .botao--texto {
+  color: #9be8c8;
+  min-height: 40px;
+  pointer-events: auto;
+}
+
+.vazio,
+.nota {
+  color: var(--cor-texto-suave);
+}
+
+.erro-geral {
+  color: var(--cor-despesa);
+  font-weight: 600;
+}
+
+/* ===== Telas ===== */
+.secao {
+  margin-top: 24px;
+}
+
+.secao h2 {
+  margin-bottom: 12px;
+}
+
+.cartoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cartao {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.cartao--largo {
+  grid-column: 1 / -1;
+}
+
+.cartao__rotulo {
+  color: var(--cor-texto-suave);
+  font-size: 0.875rem;
+}
+
+.cartao__valor {
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.cartao--largo .cartao__valor {
+  font-size: 1.75rem;
+}
+
+.cartao--receita .cartao__valor {
+  color: var(--cor-receita);
+}
+
+.cartao--despesa .cartao__valor {
+  color: var(--cor-despesa);
+}
+
+.barras {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.barra__linha {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 0.9375rem;
+}
+
+.barra__trilho {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--cor-borda);
+  overflow: hidden;
+}
+
+.barra__preenchimento {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--cor-despesa);
+}
+
+.barra__preenchimento--receita {
+  background: var(--cor-receita);
+}
+
+.lista-lancamentos {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lancamento {
+  padding: 12px 16px 4px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.lancamento__principal {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lancamento__info {
+  display: grid;
+  min-width: 0;
+}
+
+.lancamento__descricao {
+  overflow-wrap: anywhere;
+}
+
+.lancamento__meta {
+  color: var(--cor-texto-suave);
+  font-size: 0.875rem;
+}
+
+.valor {
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.valor--receita {
+  color: var(--cor-receita);
+}
+
+.valor--despesa {
+  color: var(--cor-despesa);
+}
+
+.lancamento__acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.filtros {
+  display: grid;
+  gap: 0 12px;
+}
+
+.legenda {
+  display: flex;
+  gap: 16px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.legenda li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legenda__marca {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legenda__marca--receita,
+.grafico__barra--receita {
+  background: var(--cor-receita);
+  fill: var(--cor-receita);
+}
+
+.legenda__marca--despesa,
+.grafico__barra--despesa {
+  background: var(--cor-despesa);
+  fill: var(--cor-despesa);
+}
+
+.grafico {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.grafico__eixo {
+  stroke: var(--cor-borda);
+  stroke-width: 1;
+}
+
+.grafico__rotulo {
+  fill: var(--cor-texto-suave);
+  font-size: 10px;
+}
+
+.tabela-rolavel {
+  overflow-x: auto;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.tabela th,
+.tabela td {
+  padding: 10px 8px;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela thead th,
+.tabela tbody th,
+.tabela tfoot th {
+  text-align: left;
+}
+
+.tabela thead th.numero {
+  text-align: right;
+}
+
+.tabela tfoot th,
+.tabela tfoot td {
+  font-weight: 700;
+  border-bottom: 0;
+}
+
+.acoes {
+  margin-bottom: 16px;
+}
+
+/* ===== Telas maiores (o celular é o padrão; aqui só se acrescenta) ===== */
+@media (min-width: 480px) {
+  .filtros {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .cartoes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cartao--largo {
+    grid-column: auto;
+  }
+
+  .navegacao {
+    position: static;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    grid-template-columns: repeat(4, auto);
+    justify-content: start;
+    border-top: 0;
+    border-bottom: 1px solid var(--cor-borda);
+    background: transparent;
+  }
+
+  .navegacao a {
+    flex-direction: row;
+    gap: 8px;
+    min-height: var(--alvo-toque);
+    padding: 0 16px;
+    font-size: 0.9375rem;
+  }
+
+  .navegacao a[aria-current='page'] {
+    box-shadow: inset 0 -3px 0 var(--cor-primaria);
+  }
+
+  .principal {
+    padding-bottom: 120px;
+  }
+
+  .fab {
+    bottom: 24px;
+  }
+
+  .avisos {
+    bottom: 96px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
