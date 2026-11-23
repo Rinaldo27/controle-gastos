@@ -6,7 +6,7 @@ import { gerarRelatorioMensal } from '../../../src/js/domain/relatorioPdf.js';
 test('descreve o resultado do mês em linguagem comum', () => {
   assert.equal(
     descreverResultado({ receitas: 500000, despesas: 192050, saldo: 307950 }),
-    'Sobrou este mês',
+    'Sobrou no mês',
   );
   assert.equal(
     descreverResultado({ receitas: 80000, despesas: 182000, saldo: -102000 }),
@@ -21,7 +21,7 @@ test('descreve o resultado do mês em linguagem comum', () => {
 test('trata o mês zerado: sem lançamentos ou entrada igual à saída', () => {
   assert.equal(
     descreverResultado({ receitas: 0, despesas: 0, saldo: 0 }),
-    'Sem lançamentos neste mês',
+    'Sem lançamentos no mês',
   );
   assert.equal(
     descreverResultado({ receitas: 10000, despesas: 10000, saldo: 0 }),
@@ -50,8 +50,8 @@ test('a mesma frase aparece no relatório em PDF', () => {
     ].map((m) => Buffer.from(m[1], 'hex').toString('latin1'));
 
   assert.ok(
-    textos([lancamento('receita', 5000), lancamento('despesa', 1000)]).includes('Sobrou este mês'),
+    textos([lancamento('receita', 5000), lancamento('despesa', 1000)]).includes('Sobrou no mês'),
   );
   assert.ok(textos([lancamento('despesa', 1000)]).includes('Gastou mais do que recebeu'));
-  assert.ok(textos([]).includes('Sem lançamentos neste mês'));
+  assert.ok(textos([]).includes('Sem lançamentos no mês'));
 });

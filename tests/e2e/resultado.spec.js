@@ -12,7 +12,7 @@ test.describe('Resultado do mês', () => {
     await semear(page);
     await irPara(page, 'resumo');
     await expect(page.getByText('Resultado do mês')).toBeVisible();
-    await expect(page.getByTestId('saldo-legenda')).toHaveText('Sobrou este mês');
+    await expect(page.getByTestId('saldo-legenda')).toHaveText('Sobrou no mês');
   });
 
   test('explica quando se gastou mais do que se recebeu', async ({ page }) => {
@@ -48,6 +48,6 @@ test.describe('Resultado do mês', () => {
     await page.getByTestId('mes-anterior').click();
     await page.getByTestId('mes-anterior').click();
     await expect(page.getByTestId('mes-atual')).toHaveText('setembro de 2026');
-    await expect(page.getByTestId('saldo-legenda')).toHaveText('Sem lançamentos neste mês');
+    await expect(page.getByTestId('saldo-legenda')).toHaveText('Sem lançamentos no mês');
   });
 });
